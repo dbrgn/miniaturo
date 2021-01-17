@@ -3,6 +3,7 @@ name = "rawthumbs"
 version = "0.1.0"
 authors = ["Danilo Bargen <mail@dbrgn.ch>"]
 edition = "2018"
+license = "GPL-3.0+"
 
 [dependencies]
 anyhow = "1"
