@@ -8,6 +8,7 @@ license = "GPL-3.0+"
 
 [dependencies]
 anyhow = "1"
+clap = { version = "3.0.0-beta.2", features = ["std", "derive", "cargo"], default-features = false }
 image = { version = "0.23", features = ["png", "jpeg", "tiff"], default-features = false }
 
 [build-dependencies]
