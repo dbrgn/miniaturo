@@ -1,0 +1,13 @@
+[package]
+name = "rawthumbs"
+version = "0.1.0"
+authors = ["Danilo Bargen <mail@dbrgn.ch>"]
+edition = "2018"
+
+[dependencies]
+anyhow = "1"
+image = { version = "0.23", features = ["png", "jpeg", "tiff"], default-features = false }
+
+[build-dependencies]
+bindgen = "0.56"
+pkg-config = "0.3"
