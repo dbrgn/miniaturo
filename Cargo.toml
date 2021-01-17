@@ -1,7 +1,8 @@
 [package]
-name = "rawthumbs"
+name = "miniaturo"
 version = "0.1.0"
 authors = ["Danilo Bargen <mail@dbrgn.ch>"]
+description = "A RAW image thumbnailer."
 edition = "2018"
 license = "GPL-3.0+"
 

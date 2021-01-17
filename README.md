@@ -1,4 +1,4 @@
-# rawthumbs
+# miniaturo
 
 A RAW image thumbnailer written in Rust.
 
@@ -6,6 +6,10 @@ This project is intended to be a drop-in replacement for the (mostly
 unmaintained) [raw-thumbnailer] project.
 
 [raw-thumbnailer]: https://libopenraw.freedesktop.org/raw-thumbnailer/
+
+## Project Name
+
+The name of this project is the Esperanto word for "thumbnail".
 
 ## License
 
