@@ -7,7 +7,18 @@ unmaintained) [raw-thumbnailer] project.
 
 [raw-thumbnailer]: https://libopenraw.freedesktop.org/raw-thumbnailer/
 
-## Project Name
+## Implementation notes
+
+miniaturo uses [libopenraw] to parse the RAW image and thus supports all camera
+formats that libopenraw supports.
+
+The loading, resizing and encoding of the thumbnail is done in pure Rust using
+[image-rs].
+
+[libopenraw]: https://libopenraw.freedesktop.org/
+[image-rs]: https://github.com/image-rs/image
+
+## Project name
 
 The name of this project is the Esperanto word for "thumbnail".
 
