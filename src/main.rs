@@ -11,7 +11,7 @@ use std::os::unix::ffi::OsStrExt;
 
 use anyhow::{bail, Result};
 use clap::Clap;
-use image::{io::Reader as ImageReader, DynamicImage, ImageFormat};
+use image::{imageops::FilterType, io::Reader as ImageReader, DynamicImage, ImageFormat};
 
 mod libopenraw;
 
@@ -69,9 +69,15 @@ fn thumbnail_to_image(thumbnail: ORThumbnailRef, orientation: i32) -> Result<Dyn
 
 /// Save the image data `img` to `output_path`.
 ///
+/// The sampling filter used is Catmull-Rom. It offers a good balance between
+/// performance and quality. See [image-rs
+/// docs](https://docs.rs/image/*/image/imageops/enum.FilterType.html) for more
+/// details.
+///
 /// For compatibility with raw-thumbnailer, the output format is always PNG.
 fn save_thumbnail(img: DynamicImage, output_path: &Path, thumbnail_size: u32) -> Result<()> {
-    img.save_with_format(output_path, ImageFormat::Png)?;
+    img.resize(thumbnail_size, thumbnail_size, FilterType::CatmullRom)
+        .save_with_format(output_path, ImageFormat::Png)?;
     Ok(())
 }
 
