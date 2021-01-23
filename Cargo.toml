@@ -10,10 +10,9 @@ license = "GPL-3.0+"
 anyhow = "1"
 clap = { version = "3.0.0-beta.2", features = ["std", "derive", "cargo"], default-features = false }
 image = { version = "0.23", features = ["png", "jpeg", "tiff"], default-features = false }
+libopenraw-rs = { git = "https://gitlab.freedesktop.org/libopenraw/libopenraw-rs.git", rev = "f992e4ffd132dde852226bd13af1ea6d0a15e42e" }
 
 [build-dependencies]
-bindgen = "0.56"
-pkg-config = "0.3"
 
 [profile.release]
 lto = true
