@@ -56,6 +56,14 @@ fn to_image(thumbnail: &libopenraw::Thumbnail, _orientation: i32) -> Result<imag
             let mut reader = image::io::Reader::new(Cursor::new(data));
             reader.set_format(format);
             reader.decode()?
+        },
+        DataType::OR_DATA_TYPE_PIXMAP_8RGB => {
+            let (x, y) = thumbnail.get_dimensions();
+            if let Some(img) = image::RgbImage::from_raw(x, y, data.to_vec()) {
+                image::DynamicImage::ImageRgb8(img)
+            } else {
+                image::DynamicImage::ImageRgb8(image::RgbImage::new(x, y))
+            }
         }
         _ => bail!("Unsupported thumbnail format: {:?}", format),
     })
