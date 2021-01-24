@@ -5,12 +5,17 @@ A RAW image thumbnailer written in Rust.
 This project is intended to be a drop-in replacement for the (mostly
 unmaintained) [raw-thumbnailer] project.
 
+> :warning: **Note:** Miniaturo requires libopenraw 0.3, which was released in
+> December 2020. As of early 2021, this library version is not yet bundled with
+> distros that don't follow rolling releases. In those cases you need to
+> manually install libopenraw.
+
 [raw-thumbnailer]: https://libopenraw.freedesktop.org/raw-thumbnailer/
 
 ## Implementation notes
 
-miniaturo uses [libopenraw] to parse the RAW image and thus supports all camera
-formats that libopenraw supports.
+miniaturo uses [libopenraw] (0.3) to parse the RAW image and thus supports
+all camera formats that libopenraw supports.
 
 The loading, resizing and encoding of the thumbnail is done in pure Rust using
 [image-rs].
