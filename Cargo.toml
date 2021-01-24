@@ -12,7 +12,11 @@ clap = { version = "3.0.0-beta.2", features = ["std", "derive", "cargo"], defaul
 image = { version = "0.23", features = ["png", "jpeg", "tiff"], default-features = false }
 libopenraw-rs = { git = "https://gitlab.freedesktop.org/libopenraw/libopenraw-rs.git", rev = "f992e4ffd132dde852226bd13af1ea6d0a15e42e" }
 
-[build-dependencies]
+[dev-dependencies]
+assert_cmd = "1"
+
+[profile.dev]
+opt-level = 2  # Optimize even in debug mode, since otherwise image operations are painfully slow
 
 [profile.release]
 lto = true

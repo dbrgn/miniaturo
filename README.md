@@ -22,6 +22,16 @@ The loading, resizing and encoding of the thumbnail is done in pure Rust using
 
 The name of this project is the Esperanto word for "thumbnail".
 
+## Tests
+
+To run integration tests, first download the test images:
+
+    python3 tests/download-test-images.py
+
+Then run tests:
+
+    cargo test
+
 ## License
 
 This project is licensed under the GPLv3 or later.
