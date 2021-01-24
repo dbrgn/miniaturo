@@ -1,5 +1,5 @@
-use std::path::{Path, PathBuf};
 use std::io::Cursor;
+use std::path::{Path, PathBuf};
 
 use anyhow::{bail, Result};
 use clap::Clap;
@@ -56,7 +56,7 @@ fn to_image(thumbnail: &libopenraw::Thumbnail, _orientation: i32) -> Result<imag
             let mut reader = image::io::Reader::new(Cursor::new(data));
             reader.set_format(format);
             reader.decode()?
-        },
+        }
         DataType::OR_DATA_TYPE_PIXMAP_8RGB => {
             let (x, y) = thumbnail.get_dimensions();
             if let Some(img) = image::RgbImage::from_raw(x, y, data.to_vec()) {
@@ -74,7 +74,10 @@ fn main() -> anyhow::Result<()> {
     let opts: Opts = Opts::parse();
 
     // Create a new rawfile
-    let rawfile = libopenraw::RawFile::from_file(&opts.input_path, libopenraw::RawFileType::OR_RAWFILE_TYPE_UNKNOWN)?;
+    let rawfile = libopenraw::RawFile::from_file(
+        &opts.input_path,
+        libopenraw::RawFileType::OR_RAWFILE_TYPE_UNKNOWN,
+    )?;
 
     // Get thumbnail
     let thumbnail = rawfile.get_thumbnail(opts.thumbnail_size)?;
