@@ -1,1 +1,0 @@
-#include <libopenraw/libopenraw.h>
