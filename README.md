@@ -12,6 +12,15 @@ unmaintained) [raw-thumbnailer] project.
 
 [raw-thumbnailer]: https://libopenraw.freedesktop.org/raw-thumbnailer/
 
+## Requirements
+
+For building:
+
+- Rust
+- gcc or clang
+- pkg-config
+- libopenraw 0.3
+
 ## Implementation notes
 
 miniaturo uses [libopenraw] (0.3) to parse the RAW image and thus supports
