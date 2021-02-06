@@ -1,0 +1,110 @@
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+
+name: CI
+
+jobs:
+
+  test:
+    name: run tests
+    strategy:
+      matrix:
+        rust: [1.40.0, stable]
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout
+      - uses: actions/checkout@v2
+
+      # Install Rust
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: ${{ matrix.rust }}
+          override: true
+
+      # Install libopenraw 0.3
+      - name: Install dependencies for building libopenraw
+        run: |
+          sudo apt-get update &&
+          sudo apt-get install -y \
+             curl build-essential pkg-config libboost-dev \
+             libboost-test-dev libjpeg-dev libxml2-dev
+      - name: Install libopenraw
+        run: |
+          curl -O https://libopenraw.freedesktop.org/download/libopenraw-0.3.0.tar.bz2 &&
+          tar xf libopenraw-0.3.0.tar.bz2 &&
+          cd libopenraw-0.3.0 &&
+          ./configure &&
+          make -j4 &&
+          sudo make install
+
+      # Build
+      - name: Build
+        uses: actions-rs/cargo@v1
+        with:
+          command: build
+          args: --all-features
+
+      # Run tests
+      - name: Download test images
+        run: python3 tests/download-test-images.py
+      - name: Run tests
+        uses: actions-rs/cargo@v1
+        with:
+          command: test
+          args: --all-features
+        env:
+          LD_LIBRARY_PATH: /usr/local/lib/
+
+  clippy:
+    name: run clippy lints
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout
+      - uses: actions/checkout@v2
+
+      # Install Rust
+      - uses: actions-rs/toolchain@v1
+        with:
+            toolchain: 1.49.0
+            components: clippy
+            override: true
+
+      # Install libopenraw 0.3
+      - name: Install dependencies for building libopenraw
+        run: |
+          sudo apt-get update &&
+          sudo apt-get install -y \
+             curl build-essential pkg-config libboost-dev \
+             libboost-test-dev libjpeg-dev libxml2-dev
+      - name: Install libopenraw
+        run: |
+          curl -O https://libopenraw.freedesktop.org/download/libopenraw-0.3.0.tar.bz2 &&
+          tar xf libopenraw-0.3.0.tar.bz2 &&
+          cd libopenraw-0.3.0 &&
+          ./configure &&
+          make -j4 &&
+          sudo make install
+
+      # Run clippy
+      - uses: actions-rs/clippy-check@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          args: --all-features
+
+  fmt:
+    name: run rustfmt
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions-rs/toolchain@v1
+      with:
+          toolchain: 1.49.0
+          override: true
+    - run: rustup component add rustfmt
+    - uses: actions-rs/cargo@v1
+      with:
+        command: fmt
+        args: --all -- --check
