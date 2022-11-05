@@ -2,23 +2,23 @@ use std::io::Cursor;
 use std::path::{Path, PathBuf};
 
 use anyhow::{bail, Result};
-use clap::Clap;
+use clap::{command, arg, Parser};
 use image::{imageops::FilterType, DynamicImage, ImageFormat};
 use libopenraw_rs as libopenraw;
 
-#[derive(Clap)]
-#[clap(about, version)]
+#[derive(Parser, Debug)]
+#[command(about, version)]
 struct Opts {
     /// Input file
-    #[clap(short = 'i')]
+    #[arg(short = 'i')]
     input_path: PathBuf,
 
     /// Output file (PNG)
-    #[clap(short = 'o')]
+    #[arg(short = 'o')]
     output_path: PathBuf,
 
     /// Thumbnail size
-    #[clap(short = 's', default_value = "128")]
+    #[arg(short = 's', default_value = "128")]
     thumbnail_size: u32,
 }
 
