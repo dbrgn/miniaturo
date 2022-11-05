@@ -2,12 +2,22 @@ use std::io::Cursor;
 use std::path::{Path, PathBuf};
 
 use anyhow::{bail, Result};
-use clap::{command, arg, Parser};
+use clap::{arg, command, Parser};
 use image::{imageops::FilterType, DynamicImage, ImageFormat};
 use libopenraw_rs as libopenraw;
 
 #[derive(Parser, Debug)]
-#[command(about, version)]
+#[command(
+    about,
+    author = clap::crate_authors!("\n"),
+    version,
+    help_template = "{before-help}{name} {version}
+{about-with-newline}{author-with-newline}
+{usage-heading} {usage}
+
+{all-args}{after-help}",
+    after_help = "GitHub: https://github.com/dbrgn/miniaturo"
+)]
 struct Opts {
     /// Input file
     #[arg(short = 'i')]
