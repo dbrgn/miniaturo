@@ -9,7 +9,7 @@ license = "GPL-3.0+"
 [dependencies]
 anyhow = "1"
 clap = { version = "4", features = ["std", "derive", "help", "usage", "cargo", "error-context", "wrap_help"], default-features = false }
-image = { version = "0.23", features = ["png", "jpeg", "tiff"], default-features = false }
+image = { version = "0.24", features = ["png", "jpeg", "tiff"], default-features = false }
 libopenraw-rs = { git = "https://gitlab.freedesktop.org/libopenraw/libopenraw-rs.git", rev = "f992e4ffd132dde852226bd13af1ea6d0a15e42e" }
 
 [dev-dependencies]
