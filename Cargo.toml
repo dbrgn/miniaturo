@@ -13,7 +13,7 @@ image = { version = "0.24", features = ["png", "jpeg", "tiff"], default-features
 libopenraw-rs = { git = "https://gitlab.freedesktop.org/libopenraw/libopenraw-rs.git", rev = "f992e4ffd132dde852226bd13af1ea6d0a15e42e" }
 
 [dev-dependencies]
-assert_cmd = "1"
+assert_cmd = "2"
 
 [profile.dev]
 opt-level = 2  # Optimize even in debug mode, since otherwise image operations are painfully slow
