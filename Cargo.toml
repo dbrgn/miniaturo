@@ -1,6 +1,6 @@
 [package]
 name = "miniaturo"
-version = "0.1.0"
+version = "0.5.0"
 authors = ["Danilo Bargen <mail@dbrgn.ch>"]
 description = "A RAW image thumbnailer."
 edition = "2018"
