@@ -32,22 +32,81 @@ struct Opts {
     thumbnail_size: u32,
 }
 
-/// Save the image data `img` to `output_path`.
+/// Describe how to rotate the image pixels (clockwise) in order to get a
+/// straight picture.
+#[derive(Debug)]
+enum Rotate {
+    Deg0,
+    Deg90,
+    Deg180,
+    Deg270,
+}
+
+#[derive(Debug)]
+struct ExifOrientation {
+    rotate: Rotate,
+    mirrored: bool,
+}
+
+impl ExifOrientation {
+    /// Create an [`ExifOrientation`] from an orientation integer as returned
+    /// by libopenraw.
+    ///
+    /// See <https://jdhao.github.io/2019/07/31/image_rotation_exif_info/> for
+    /// more details on EXIF rotation values.
+    fn from_exif(orientation: i32) -> Result<Self> {
+        let rotate = match orientation {
+            0 | 1 | 2 => Rotate::Deg0,
+            3 | 4 => Rotate::Deg180,
+            5 | 6 => Rotate::Deg90,
+            7 | 8 => Rotate::Deg270,
+            _ => bail!("Invalid exif orientation: {}", orientation),
+        };
+        let mirrored = match orientation {
+            0 | 1 | 3 | 6 | 8 => false,
+            2 | 4 | 5 | 7 => true,
+            _ => bail!("Invalid exif orientation: {}", orientation),
+        };
+        Ok(Self { rotate, mirrored })
+    }
+}
+
+/// Save the image data `img` to `output_path` with proper size and
+/// orientation.
 ///
-/// The sampling filter used is Catmull-Rom. It offers a good balance between
-/// performance and quality. See [image-rs
+/// The sampling filter used for scaling is Catmull-Rom. It offers a good
+/// balance between performance and quality. See [image-rs
 /// docs](https://docs.rs/image/*/image/imageops/enum.FilterType.html) for more
 /// details.
 ///
 /// For compatibility with raw-thumbnailer, the output format is always PNG.
-fn save_thumbnail(img: DynamicImage, output_path: &Path, thumbnail_size: u32) -> Result<()> {
-    img.resize(thumbnail_size, thumbnail_size, FilterType::CatmullRom)
-        .save_with_format(output_path, ImageFormat::Png)?;
+fn save_thumbnail(
+    img: DynamicImage,
+    output_path: &Path,
+    thumbnail_size: u32,
+    orientation: ExifOrientation,
+) -> Result<()> {
+    // Resize thumbnail
+    let resized = img.resize(thumbnail_size, thumbnail_size, FilterType::CatmullRom);
+
+    // Mirror and rotate
+    let flipped = match orientation.mirrored {
+        true => resized.fliph(),
+        false => resized,
+    };
+    let rotated = match orientation.rotate {
+        Rotate::Deg0 => flipped,
+        Rotate::Deg90 => flipped.rotate90(),
+        Rotate::Deg180 => flipped.rotate180(),
+        Rotate::Deg270 => flipped.rotate270(),
+    };
+
+    rotated.save_with_format(output_path, ImageFormat::Png)?;
     Ok(())
 }
 
 /// Convert this thumbnail to an image-rs `DynamicImage`.
-fn to_image(thumbnail: &libopenraw::Thumbnail, _orientation: i32) -> Result<image::DynamicImage> {
+fn to_image(thumbnail: &libopenraw::Thumbnail) -> Result<image::DynamicImage> {
     // Extract raw thumbnail data
     let data = thumbnail.get_data()?;
 
@@ -93,13 +152,13 @@ fn main() -> anyhow::Result<()> {
     let thumbnail = rawfile.get_thumbnail(opts.thumbnail_size)?;
 
     // Get orientation
-    let orientation = rawfile.get_orientation();
+    let orientation = ExifOrientation::from_exif(rawfile.get_orientation())?;
 
     // Convert thumbnail to image-rs buffer
-    let img = to_image(&thumbnail, orientation)?;
+    let img = to_image(&thumbnail)?;
 
     // Write output file
-    save_thumbnail(img, &opts.output_path, opts.thumbnail_size)?;
+    save_thumbnail(img, &opts.output_path, opts.thumbnail_size, orientation)?;
 
     // TODO exif rotate
 
