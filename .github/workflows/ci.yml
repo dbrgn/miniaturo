@@ -12,7 +12,7 @@ jobs:
     name: run tests
     strategy:
       matrix:
-        rust: [1.40.0, stable]
+        rust: [1.64.0, stable]
     runs-on: ubuntu-latest
     steps:
       # Checkout
@@ -68,7 +68,7 @@ jobs:
       # Install Rust
       - uses: actions-rs/toolchain@v1
         with:
-            toolchain: 1.49.0
+            toolchain: 1.64.0
             components: clippy
             override: true
 
@@ -101,7 +101,7 @@ jobs:
     - uses: actions/checkout@v2
     - uses: actions-rs/toolchain@v1
       with:
-          toolchain: 1.49.0
+          toolchain: 1.64.0
           override: true
     - run: rustup component add rustfmt
     - uses: actions-rs/cargo@v1
