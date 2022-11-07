@@ -4,7 +4,6 @@ use std::path::{Path, PathBuf};
 use anyhow::{bail, Result};
 use clap::{arg, command, Parser};
 use image::{imageops::FilterType, DynamicImage, ImageFormat};
-use libopenraw_rs as libopenraw;
 
 #[derive(Parser, Debug)]
 #[command(
@@ -114,11 +113,11 @@ fn to_image(thumbnail: &libopenraw::Thumbnail) -> Result<image::DynamicImage> {
     let format = thumbnail.get_format();
     use libopenraw::DataType;
     Ok(match format {
-        DataType::OR_DATA_TYPE_JPEG | DataType::OR_DATA_TYPE_PNG | DataType::OR_DATA_TYPE_TIFF => {
+        DataType::Jpeg | DataType::Png | DataType::Tiff => {
             let format = match format {
-                DataType::OR_DATA_TYPE_JPEG => image::ImageFormat::Jpeg,
-                DataType::OR_DATA_TYPE_PNG => image::ImageFormat::Png,
-                DataType::OR_DATA_TYPE_TIFF => image::ImageFormat::Tiff,
+                DataType::Jpeg => image::ImageFormat::Jpeg,
+                DataType::Png => image::ImageFormat::Png,
+                DataType::Tiff => image::ImageFormat::Tiff,
                 _ => unreachable!(),
             };
 
@@ -126,7 +125,7 @@ fn to_image(thumbnail: &libopenraw::Thumbnail) -> Result<image::DynamicImage> {
             reader.set_format(format);
             reader.decode()?
         }
-        DataType::OR_DATA_TYPE_PIXMAP_8RGB => {
+        DataType::Pixmap8Rgb => {
             let (x, y) = thumbnail.get_dimensions();
             if let Some(img) = image::RgbImage::from_raw(x, y, data.to_vec()) {
                 image::DynamicImage::ImageRgb8(img)
@@ -143,10 +142,8 @@ fn main() -> anyhow::Result<()> {
     let opts: Opts = Opts::parse();
 
     // Create a new rawfile
-    let rawfile = libopenraw::RawFile::from_file(
-        &opts.input_path,
-        libopenraw::RawFileType::OR_RAWFILE_TYPE_UNKNOWN,
-    )?;
+    let rawfile =
+        libopenraw::RawFile::from_file(&opts.input_path, libopenraw::RawFileType::Unknown)?;
 
     // Get thumbnail
     let thumbnail = rawfile.get_thumbnail(opts.thumbnail_size)?;

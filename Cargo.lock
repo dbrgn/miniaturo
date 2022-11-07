@@ -54,9 +54,9 @@ dependencies = [
 
 [[package]]
 name = "bytemuck"
-version = "1.12.2"
+version = "1.12.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5aec14f5d4e6e3f927cd0c81f72e5710d95ee9019fbeb4b3021193867491bfd8"
+checksum = "aaa3a8d9a1ca92e282c96a32d6511b695d7d994d1d102ba85d279f9b2756947f"
 
 [[package]]
 name = "byteorder"
@@ -225,17 +225,19 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "fc7fcc620a3bff7cdd7a365be3376c97191aeaccc2a603e600951e452615bf89"
 
 [[package]]
-name = "libopenraw-rs"
-version = "0.1.0"
-source = "git+https://gitlab.freedesktop.org/libopenraw/libopenraw-rs.git?rev=f992e4ffd132dde852226bd13af1ea6d0a15e42e#f992e4ffd132dde852226bd13af1ea6d0a15e42e"
+name = "libopenraw"
+version = "0.1.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "414d2b5483e374e36f017e25a5282bdd14da22342083d5bf0a70e57be3a55441"
 dependencies = [
- "libopenraw-rs-sys",
+ "libopenraw-sys",
 ]
 
 [[package]]
-name = "libopenraw-rs-sys"
+name = "libopenraw-sys"
 version = "0.1.0"
-source = "git+https://gitlab.freedesktop.org/libopenraw/libopenraw-rs.git?rev=f992e4ffd132dde852226bd13af1ea6d0a15e42e#f992e4ffd132dde852226bd13af1ea6d0a15e42e"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "8e3aec37ce96df68e55a700e063ce233fee7b3910a4c43d31f7138d919b8ec0e"
 dependencies = [
  "pkg-config",
 ]
@@ -260,7 +262,7 @@ dependencies = [
  "assert_cmd",
  "clap",
  "image",
- "libopenraw-rs",
+ "libopenraw",
 ]
 
 [[package]]

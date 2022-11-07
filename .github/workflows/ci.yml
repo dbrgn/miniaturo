@@ -33,9 +33,9 @@ jobs:
              libboost-test-dev libjpeg-dev libxml2-dev
       - name: Install libopenraw
         run: |
-          curl -O https://libopenraw.freedesktop.org/download/libopenraw-0.3.0.tar.bz2 &&
-          tar xf libopenraw-0.3.0.tar.bz2 &&
-          cd libopenraw-0.3.0 &&
+          curl -O https://libopenraw.freedesktop.org/download/libopenraw-0.3.2.tar.bz2 &&
+          tar xf libopenraw-0.3.2.tar.bz2 &&
+          cd libopenraw-0.3.2 &&
           ./configure &&
           make -j4 &&
           sudo make install
@@ -81,9 +81,9 @@ jobs:
              libboost-test-dev libjpeg-dev libxml2-dev
       - name: Install libopenraw
         run: |
-          curl -O https://libopenraw.freedesktop.org/download/libopenraw-0.3.0.tar.bz2 &&
-          tar xf libopenraw-0.3.0.tar.bz2 &&
-          cd libopenraw-0.3.0 &&
+          curl -O https://libopenraw.freedesktop.org/download/libopenraw-0.3.2.tar.bz2 &&
+          tar xf libopenraw-0.3.2.tar.bz2 &&
+          cd libopenraw-0.3.2 &&
           ./configure &&
           make -j4 &&
           sudo make install
