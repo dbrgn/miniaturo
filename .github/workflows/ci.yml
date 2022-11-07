@@ -12,7 +12,7 @@ jobs:
     name: run tests
     strategy:
       matrix:
-        rust: [1.40.0, stable]
+        rust: [1.64.0, stable]
     runs-on: ubuntu-latest
     steps:
       # Checkout
@@ -33,9 +33,9 @@ jobs:
              libboost-test-dev libjpeg-dev libxml2-dev
       - name: Install libopenraw
         run: |
-          curl -O https://libopenraw.freedesktop.org/download/libopenraw-0.3.0.tar.bz2 &&
-          tar xf libopenraw-0.3.0.tar.bz2 &&
-          cd libopenraw-0.3.0 &&
+          curl -O https://libopenraw.freedesktop.org/download/libopenraw-0.3.2.tar.bz2 &&
+          tar xf libopenraw-0.3.2.tar.bz2 &&
+          cd libopenraw-0.3.2 &&
           ./configure &&
           make -j4 &&
           sudo make install
@@ -68,7 +68,7 @@ jobs:
       # Install Rust
       - uses: actions-rs/toolchain@v1
         with:
-            toolchain: 1.49.0
+            toolchain: 1.64.0
             components: clippy
             override: true
 
@@ -81,9 +81,9 @@ jobs:
              libboost-test-dev libjpeg-dev libxml2-dev
       - name: Install libopenraw
         run: |
-          curl -O https://libopenraw.freedesktop.org/download/libopenraw-0.3.0.tar.bz2 &&
-          tar xf libopenraw-0.3.0.tar.bz2 &&
-          cd libopenraw-0.3.0 &&
+          curl -O https://libopenraw.freedesktop.org/download/libopenraw-0.3.2.tar.bz2 &&
+          tar xf libopenraw-0.3.2.tar.bz2 &&
+          cd libopenraw-0.3.2 &&
           ./configure &&
           make -j4 &&
           sudo make install
@@ -101,7 +101,7 @@ jobs:
     - uses: actions/checkout@v2
     - uses: actions-rs/toolchain@v1
       with:
-          toolchain: 1.49.0
+          toolchain: 1.64.0
           override: true
     - run: rustup component add rustfmt
     - uses: actions-rs/cargo@v1
