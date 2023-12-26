@@ -12,6 +12,11 @@ Possible log types:
 - `[security]` to invite users to upgrade in case of vulnerabilities.
 
 
+### v0.6.0 (2023-12-26)
+
+- [added] Support EXIF rotation
+- [changed] Use the `libopenraw` crate to link against libopenraw
+
 ### v0.5.0 (2022-11-05)
 
 - Initial release. The 1.0.0 release is planned once all required features are

@@ -1,10 +1,22 @@
 [package]
 name = "miniaturo"
-version = "0.5.0"
+description = "A RAW image thumbnailer. Intended to be a drop-in replacement for the (mostly unmaintained) raw-thumbnailer project."
+version = "0.6.0"
 authors = ["Danilo Bargen <mail@dbrgn.ch>"]
-description = "A RAW image thumbnailer."
-edition = "2021"
+documentation = "https://docs.rs/miniaturo"
+repository = "https://github.com/dbrgn/miniaturo"
 license = "GPL-3.0+"
+categories = ["command-line-utilities", "multimedia::images"]
+keywords = ["raw", "thumbnailer", "thumbnails", "libopenraw"]
+edition = "2021"
+include = [
+    "**/*.rs",
+    "Cargo.toml",
+    "Cargo.lock",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE.md",
+]
 
 [dependencies]
 anyhow = "1"

@@ -21,6 +21,18 @@ For building:
 - pkg-config
 - libopenraw 0.3
 
+## Installing
+
+Ideally, you get this project through a distribution package.
+
+Alternatively, you can install through cargo from crates.io:
+
+    cargo install miniaturo
+
+Or build it yourself:
+
+    cargo build --release
+
 ## Implementation notes
 
 miniaturo uses [libopenraw] (0.3) to parse the RAW image and thus supports
