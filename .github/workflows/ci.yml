@@ -59,7 +59,7 @@ jobs:
       - uses: actions/checkout@v4
 
       # Install Rust
-      - uses: dtolnay/rust-toolchain@1.74.1
+      - uses: dtolnay/rust-toolchain@1.80.0
         with:
           components: clippy
 
@@ -87,7 +87,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: dtolnay/rust-toolchain@1.74.1
+      - uses: dtolnay/rust-toolchain@1.80.0
         with:
           components: rustfmt
       - run: cargo fmt --all -- --check
