@@ -53,6 +53,7 @@ impl ExifOrientation {
     ///
     /// See <https://jdhao.github.io/2019/07/31/image_rotation_exif_info/> for
     /// more details on EXIF rotation values.
+    #[allow(clippy::manual_range_patterns)]
     fn from_exif(orientation: i32) -> Result<Self> {
         let rotate = match orientation {
             0 | 1 | 2 => Rotate::Deg0,
