@@ -16,13 +16,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       # Checkout
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       # Install Rust
-      - uses: actions-rs/toolchain@v1
+      - uses: dtolnay/rust-toolchain@master
         with:
           toolchain: ${{ matrix.rust }}
-          override: true
 
       # Install libopenraw 0.3
       - name: Install dependencies for building libopenraw
@@ -42,19 +41,13 @@ jobs:
 
       # Build
       - name: Build
-        uses: actions-rs/cargo@v1
-        with:
-          command: build
-          args: --all-features
+        run: cargo build --all-features
 
       # Run tests
       - name: Download test images
         run: python3 tests/download-test-images.py
       - name: Run tests
-        uses: actions-rs/cargo@v1
-        with:
-          command: test
-          args: --all-features
+        run: cargo test --all-features
         env:
           LD_LIBRARY_PATH: /usr/local/lib/
 
@@ -63,14 +56,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       # Checkout
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       # Install Rust
-      - uses: actions-rs/toolchain@v1
+      - uses: dtolnay/rust-toolchain@1.74.1
         with:
-            toolchain: 1.74.1
-            components: clippy
-            override: true
+          components: clippy
 
       # Install libopenraw 0.3
       - name: Install dependencies for building libopenraw
@@ -89,22 +80,14 @@ jobs:
           sudo make install
 
       # Run clippy
-      - uses: actions-rs/clippy-check@v1
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          args: --all-features
+      - run: cargo clippy --all-features -- -D warnings
 
   fmt:
     name: run rustfmt
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - uses: actions-rs/toolchain@v1
-      with:
-          toolchain: 1.74.1
-          override: true
-    - run: rustup component add rustfmt
-    - uses: actions-rs/cargo@v1
-      with:
-        command: fmt
-        args: --all -- --check
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@1.74.1
+        with:
+          components: rustfmt
+      - run: cargo fmt --all -- --check
