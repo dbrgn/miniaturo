@@ -4,6 +4,7 @@ use std::path::{Path, PathBuf};
 use anyhow::{bail, Result};
 use clap::{arg, command, Parser};
 use image::{imageops::FilterType, DynamicImage, ImageFormat};
+use libopenraw::Bitmap;
 
 #[derive(Parser, Debug)]
 #[command(
@@ -54,7 +55,7 @@ impl ExifOrientation {
     /// See <https://jdhao.github.io/2019/07/31/image_rotation_exif_info/> for
     /// more details on EXIF rotation values.
     #[allow(clippy::manual_range_patterns)]
-    fn from_exif(orientation: i32) -> Result<Self> {
+    fn from_exif(orientation: u32) -> Result<Self> {
         let rotate = match orientation {
             0 | 1 | 2 => Rotate::Deg0,
             3 | 4 => Rotate::Deg180,
@@ -108,26 +109,22 @@ fn save_thumbnail(
 /// Convert this thumbnail to an image-rs `DynamicImage`.
 fn to_image(thumbnail: &libopenraw::Thumbnail) -> Result<image::DynamicImage> {
     // Extract raw thumbnail data
-    let data = thumbnail.get_data()?;
+    let data = thumbnail
+        .data8()
+        .ok_or_else(|| anyhow::anyhow!("No thumbnail data"))?;
 
     // Convert depending on format
-    let format = thumbnail.get_format();
+    let format = thumbnail.data_type();
     use libopenraw::DataType;
     Ok(match format {
-        DataType::Jpeg | DataType::Png | DataType::Tiff => {
-            let format = match format {
-                DataType::Jpeg => image::ImageFormat::Jpeg,
-                DataType::Png => image::ImageFormat::Png,
-                DataType::Tiff => image::ImageFormat::Tiff,
-                _ => unreachable!(),
-            };
-
+        DataType::Jpeg => {
             let mut reader = image::io::Reader::new(Cursor::new(data));
-            reader.set_format(format);
+            reader.set_format(image::ImageFormat::Jpeg);
             reader.decode()?
         }
-        DataType::Pixmap8Rgb => {
-            let (x, y) = thumbnail.get_dimensions();
+        DataType::PixmapRgb8 => {
+            let x = thumbnail.width();
+            let y = thumbnail.height();
             if let Some(img) = image::RgbImage::from_raw(x, y, data.to_vec()) {
                 image::DynamicImage::ImageRgb8(img)
             } else {
@@ -143,14 +140,13 @@ fn main() -> anyhow::Result<()> {
     let opts: Opts = Opts::parse();
 
     // Create a new rawfile
-    let rawfile =
-        libopenraw::RawFile::from_file(&opts.input_path, libopenraw::RawFileType::Unknown)?;
+    let rawfile = libopenraw::rawfile_from_file(&opts.input_path, None)?;
 
     // Get thumbnail
-    let thumbnail = rawfile.get_thumbnail(opts.thumbnail_size)?;
+    let thumbnail = rawfile.thumbnail(opts.thumbnail_size)?;
 
     // Get orientation
-    let orientation = ExifOrientation::from_exif(rawfile.get_orientation())?;
+    let orientation = ExifOrientation::from_exif(rawfile.orientation())?;
 
     // Convert thumbnail to image-rs buffer
     let img = to_image(&thumbnail)?;
