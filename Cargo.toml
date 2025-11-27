@@ -22,7 +22,7 @@ include = [
 anyhow = "1"
 clap = { version = "4", features = ["std", "derive", "help", "usage", "cargo", "error-context", "wrap_help"], default-features = false }
 image = { version = "0.24", features = ["png", "jpeg", "tiff"], default-features = false }
-libopenraw = "0.1.1"
+libopenraw = "0.4.0-alpha.2"
 
 [dev-dependencies]
 assert_cmd = "2"

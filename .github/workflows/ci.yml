@@ -23,22 +23,6 @@ jobs:
         with:
           toolchain: ${{ matrix.rust }}
 
-      # Install libopenraw 0.3
-      - name: Install dependencies for building libopenraw
-        run: |
-          sudo apt-get update &&
-          sudo apt-get install -y \
-             curl build-essential pkg-config libboost-dev \
-             libboost-test-dev libjpeg-dev libxml2-dev
-      - name: Install libopenraw
-        run: |
-          curl -O https://libopenraw.freedesktop.org/download/libopenraw-0.3.7.tar.bz2 &&
-          tar xf libopenraw-0.3.7.tar.bz2 &&
-          cd libopenraw-0.3.7 &&
-          ./configure &&
-          make -j4 &&
-          sudo make install
-
       # Build
       - name: Build
         run: cargo build --all-features
@@ -62,22 +46,6 @@ jobs:
       - uses: dtolnay/rust-toolchain@1.74.1
         with:
           components: clippy
-
-      # Install libopenraw 0.3
-      - name: Install dependencies for building libopenraw
-        run: |
-          sudo apt-get update &&
-          sudo apt-get install -y \
-             curl build-essential pkg-config libboost-dev \
-             libboost-test-dev libjpeg-dev libxml2-dev
-      - name: Install libopenraw
-        run: |
-          curl -O https://libopenraw.freedesktop.org/download/libopenraw-0.3.7.tar.bz2 &&
-          tar xf libopenraw-0.3.7.tar.bz2 &&
-          cd libopenraw-0.3.7 &&
-          ./configure &&
-          make -j4 &&
-          sudo make install
 
       # Run clippy
       - run: cargo clippy --all-features -- -D warnings
